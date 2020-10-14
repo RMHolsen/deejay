@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'pry'
+require_relative '../lib/cli'
+require_relative '../lib/deejay'
+require_relative '../lib/scraper'
+
+Deejay::CLI.new.start
+
+require "irb"
+IRB.start(__FILE__)
