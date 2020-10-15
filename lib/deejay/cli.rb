@@ -1,9 +1,8 @@
-class Deejay::CLI
-
-        def initialize
+class Deejay
+         #def initialize
         #Do we really need to do anything here?
         #Leaving this open in case we do.
-        end 
+        #end 
         
         def start
             puts "Welcome to your Friendly Neighborhood Bandcamp Deejay!"
@@ -49,20 +48,19 @@ class Deejay::CLI
         
             puts "\nPlease enter the name of an album you like:"
             album = gets.strip.downcase.gsub(" ", "-")
-        
             puts "\nPlease enter the artist:"
             artist = gets.strip.downcase.gsub(" ", "")
             #Takes artist and album input
             #Reformatting the input to match an album URL
             
-            sleep 3
+            #sleep 3
             #Simulate scraping time, take out this sleep
         
-            #url = "https://#{artist}.bandcamp.com/album/#{album}
-            #album_tags = Scraper.scrape_album(url)
+            url = "https://#{artist}.bandcamp.com/album/#{album}"
+            album_tags = Scraper.scrape_album(url)
             #i.e. the array of the tags scraped from the URL assembled from the user entry
         
-            album_tags = ["folk rock", "urban folk", "alt-folk", "folk"]
+            #album_tags = ["folk rock", "urban folk", "alt-folk", "folk"]
             #For purposes of CLI testing
             
             puts "\nHere is a list of genre tags belonging to this album:"
@@ -82,14 +80,14 @@ class Deejay::CLI
             puts "\n Here are some other artists in the #{genre} category:" 
             #Reformat the genre tag AFTER you put this dialogue
         
-            sleep 3
-            puts "\nPretend some artists are listed here."
+            #sleep 3
+            #puts "\nPretend some artists are listed here."
             #Simulating the scraper, take out this sleep and, obv, the text
-            #artists = Scraper.scrape_tag(genre)
-            #artists.each.with_index(1) do |artist, idx|
-            #puts "#{idx}. #{artist}"
-            #end
-            Scraper.scrape_tag(genre)
+            artists = Scraper.scrape_tag(genre)
+            artists.each.with_index(1) do |artist, idx|
+            puts "#{idx}. #{artist}"
+            end
+
             back_to_start
         end 
         
@@ -270,7 +268,5 @@ class Deejay::CLI
                     back_to_start
                 end 
         end 
-        
-        end 
-
+            
 end 
