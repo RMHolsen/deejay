@@ -1,8 +1,12 @@
+require 'nokogiri'
+require 'pry'
+require 'open-uri'
+
 class Scraper
     def self.scrape_album(url)
         tags = []
         album = Nokogiri::HTML(open(url))
-        album.css(".tralbum-tags").each do |tag|
+        album.css(".tralbum-tags .tag").each do |tag|
         tags << tag.text
         end 
         tags
@@ -16,12 +20,12 @@ class Scraper
         #Should pull the selected genre and turn it into a URL bandcamp accepts
     
         artists = []
-        doc.css(".info .artist").each do |artist|
-          artists << artist.text.gsub("by ", "")
+        genre_page.css(".info .artist").each do |artist|
+          artists << artist.text.gsub("by ", "").strip
+          #Don't forget to take out the whitespace
         end 
         artists.uniq
-        #After this the case options shouldn't be necessary
-        #But you'll have to format the data output
+        #binding.pry
     end 
 
 end  
