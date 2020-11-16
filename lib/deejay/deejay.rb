@@ -1,7 +1,10 @@
 require_relative "version"
+require_relative "classes"
 
 module Deejay 
   class CLI
+
+   #Should be CLI.rb
 
    #def initialize
    #Do we really need to do anything here?
@@ -17,6 +20,8 @@ module Deejay
        puts "\nHow do you want to find new music today?"
        puts "\nType 'album' to find music based on an album you like."
        puts "Type 'genre' to find music based on a genre."
+       puts "\nType 'roster' to see the artists you have saved."
+       #New option! Brings up the list of saved artist objects
        puts "Type 'exit' or 'quit' to quit."
        #In a better or less time-crunched world I'd be able to cross-reference different websites
        #And offer options based on sound or recording studio or label or whatever
@@ -34,6 +39,25 @@ module Deejay
                sleep 1
                puts "\nYou have chosen to find music based on a genre."
                genre
+           when "roster"
+               #New option! Presents a list of saved artist names
+               sleep 1
+               if Artist.all.empty?
+                #HEY don't forget the if statement in case there are no artists
+                puts "\nI'm sorry, you have no saved artists at this time."
+                main_menu
+               else 
+                puts "\nHere are your saved artists: "
+                Artist.all.each.with_index(1) do |artist, idx|
+                    puts "#{idx}. #{artist.name}"
+                end 
+               end 
+               main_menu
+               #Give it a day to stop screaming and you can add in an option
+               #To look up the artist's page on bandcamp
+               #Select albums to listen to? Something? Pull up the artist's page?
+               #IDEK but there's more options here.
+               #Even more if you learn how to add a URL not found thing
            when "exit"
                sleep 1 
                puts "\nThank you! Goodbye!"
@@ -49,7 +73,6 @@ module Deejay
    end 
    
    def album
-   
        puts "\nPlease enter the name of an album you like:"
        album = gets.strip.downcase.gsub(" ", "-")
        puts "\nPlease enter the artist:"
@@ -67,15 +90,15 @@ module Deejay
        #i.e. the array of the tags scraped from the URL assembled from the user entry
   
        puts "\nHere is a list of genre tags belonging to this album:"
-      
-       album_tags.each.with_index(1) do |genre, idx|
+
+       album_tags.sort.each.with_index(1) do |genre, idx|
            puts "#{idx}. #{genre}"
        end 
        #Genre tags appearing on the album page; I believe these are artist selected
    
        puts "\n Please select a genre by number:"
        input = gets.strip.to_i
-       genre = album_tags[input - 1]
+       genre = album_tags[input]
        genre_by_album(genre)
        #User chooses a tag and we move to the next method, carrying the genre as the argument
    end 
@@ -85,10 +108,14 @@ module Deejay
        #Reformat the genre tag AFTER you put this dialogue
    
        artists = Scraper.scrape_tag(genre)
+       artists.pop
        artists.each.with_index(1) do |artist, idx|
        puts "#{idx}. #{artist}"
        end
-       back_to_start
+       save_artist(artists)
+       #Prompt user for an artist to save
+       #Then prompt user to save another artist or go back to start
+       #Must be a method to look at saved artists/an all method (INCLUDED)
    end 
    
    def genre
@@ -178,20 +205,41 @@ module Deejay
         if confirm == "Y"
             puts "\nHere are some artists in the #{input} category."
             artists = Scraper.scrape_tag(input)
+            artists.pop
             artists.each.with_index(1) do |artist, idx|
             puts "#{idx}. #{artist}"
             end
+            save_artist(artists)
+            #Again, prompting user to save an artist object
         elsif confirm == "N"
             genre
         else 
             puts "I'm sorry, I didn't understand that."
+            sleep 1
             genre
         end 
     end 
 
+    def save_artist(artists)
+        puts "\nPlease select an artist (by number) to save or type 'search' to search again:"
+        input = gets.strip.downcase
+        #Input should be an integer or the word search
+        if input == "search"
+            main_menu
+            #Pretty self-explanatory
+        elsif input.to_i.between?(0, artists.length)
+            Artist.new(artists[input.to_i - 1])
+            puts "Saved #{artists[input.to_i - 1]}." 
+        else 
+            puts "I'm sorry, I didn't understand that."
+            sleep 1
+            save_artist(artists)
+        end 
+        back_to_start
+    end
+
   end 
 end 
-
 
 
 
