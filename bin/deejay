@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
 
 require 'pry'
-require_relative '../lib/deejay/cli'
+require_relative '../lib/deejay/deejay'
+require_relative '../lib/deejay/deejaytwopointoh'
 require_relative '../lib/deejay/scraper'
 
 
 
-Deejay.new.start
+Deejay2point0::CLI.new.start
 
 #So it turns out namespacing Deejay to Deejay::CLI causes an uninitialized constant name error.
-#WTF
+#Just nest the stupid thing as a class inside a module and have done.

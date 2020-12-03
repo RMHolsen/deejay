@@ -52,6 +52,7 @@ module Deejay
                     puts "#{idx}. #{artist.name}"
                 end 
                end 
+               sleep 1
                main_menu
                #Give it a day to stop screaming and you can add in an option
                #To look up the artist's page on bandcamp
@@ -91,14 +92,14 @@ module Deejay
   
        puts "\nHere is a list of genre tags belonging to this album:"
 
-       album_tags.sort.each.with_index(1) do |genre, idx|
+       album_tags.each.with_index(1) do |genre, idx|
            puts "#{idx}. #{genre}"
        end 
        #Genre tags appearing on the album page; I believe these are artist selected
    
        puts "\n Please select a genre by number:"
        input = gets.strip.to_i
-       genre = album_tags[input]
+       genre = album_tags[input - 1]
        genre_by_album(genre)
        #User chooses a tag and we move to the next method, carrying the genre as the argument
    end 
@@ -183,7 +184,7 @@ module Deejay
    
    def back_to_start
        #The Back to Start method! Pretty self explanatory. 
-       puts "\n Would you like to search again? (Y/N)"
+       puts "\n Would you like to see the main menu again? (Y/N)"
        input = gets.strip.upcase
            if input == "Y"
                main_menu
@@ -221,7 +222,7 @@ module Deejay
     end 
 
     def save_artist(artists)
-        puts "\nPlease select an artist (by number) to save or type 'search' to search again:"
+        puts "\nPlease select an artist (by number) to save or type 'search' to see the main menu again:"
         input = gets.strip.downcase
         #Input should be an integer or the word search
         if input == "search"
@@ -235,6 +236,7 @@ module Deejay
             sleep 1
             save_artist(artists)
         end 
+        sleep 1
         back_to_start
     end
 

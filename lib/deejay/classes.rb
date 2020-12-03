@@ -1,3 +1,6 @@
+#Each class should have its own file
+#Yes even when there are small classes
+
 class Artist
     @@roster = []
     
@@ -20,8 +23,27 @@ class Album
     #And pick an album to save
 
     attr_accessor :name
+    @@collection = []
+    @@wish_list = []
 
     def initialize(name)
         @name = name
     end 
+
+    def self.want(name)
+        @@wish_list << name
+    end 
+
+    def self.have(name)
+        @@collection << name
+    end 
+
+    def self.collection
+        @@collection
+    end 
+
+    def self.wish_list
+        @@wish_list
+    end 
 end 
+
